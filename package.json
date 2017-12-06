@@ -1,0 +1,19 @@
+{
+  "name": "veloouvoiture",
+  "version": "1.0.0",
+  "description": "Is the weather good enough to go by bike or should I take my car?",
+  "main": "decisionForBrowser.js",
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FabienLebas/VeloOuVoiture.git"
+  },
+  "author": "Fabien Lebas",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/FabienLebas/VeloOuVoiture/issues"
+  },
+  "homepage": "https://github.com/FabienLebas/VeloOuVoiture#readme"
+}
