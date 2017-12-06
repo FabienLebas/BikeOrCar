@@ -1,7 +1,6 @@
 const request = require("request");
-const fs = require("fs");
+const appId = require("./myKeys");
 
-const appId = fs.readFileSync(".gitignore").toString();
 const userLimits = {
   rain: 0,
   snow: 0,
