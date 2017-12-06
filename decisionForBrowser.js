@@ -1,5 +1,3 @@
-console.log(process.env.appId);
-
 const userLimits = {
   rain: 0,
   snow: 0,
@@ -113,3 +111,7 @@ xhr.onreadystatechange = function(){
 };
 xhr.open('GET',url);
 xhr.send();
+
+module.exports = {
+  userLimits: userLimits
+};
