@@ -1,4 +1,4 @@
-# VeloOuVoiture
+# BikeOrCar
 Is the weather good enough to go by bike or should I take my car?
 
 `Bike Or Car` is still under construction. Be patient... Or contribute!
