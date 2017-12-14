@@ -1,21 +1,21 @@
 {
-  "name": "veloouvoiture",
+  "name": "bikeorcar",
   "version": "1.0.0",
   "description": "Is the weather good enough to go by bike or should I take my car?",
-  "main": "decisionForBrowser.js",
+  "main": "index.js",
   "scripts": {
     "test": "jest --coverage"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FabienLebas/VeloOuVoiture.git"
+    "url": "git+https://github.com/FabienLebas/BikeOrCar.git"
   },
   "author": "Fabien Lebas",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/FabienLebas/VeloOuVoiture/issues"
+    "url": "https://github.com/FabienLebas/BikeOrCar/issues"
   },
-  "homepage": "https://github.com/FabienLebas/VeloOuVoiture#readme",
+  "homepage": "https://github.com/FabienLebas/BikeOrCar#readme",
   "dependencies": {
     "express": "^4.16.2"
   }
