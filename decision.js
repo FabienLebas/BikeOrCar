@@ -39,19 +39,22 @@ function groupByDate(selectedTimes){
 function displayDecisions(groupByDate){
   const decision = groupByDate.map((object) => {
     if (object.morningExplanation === "week-end"){
-      return `\n${object.date} week-end`;
+      return `${object.date} week-end`;
     } else if (object.morningBike && object.eveningBike) {
-      return `\n${object.date} 🚲`;
+      return `${object.date} 🚲`;
     } else if (!object.morningBike && !object.eveningBike){
-      return `\n${object.date} 🚙 : ${object.morningExplanation} in the morning and ${object.eveningExplanation} in the evening.`;
+      return `${object.date} 🚙 : ${object.morningExplanation} in the morning and ${object.eveningExplanation} in the evening.`;
     } else if (!object.morningBike && object.eveningBike){
-      return `\n${object.date} 🚙 : ${object.morningExplanation} in the morning.`;
+      return `${object.date} 🚙 : ${object.morningExplanation} in the morning.`;
     } else if (object.morningBike && !object.eveningBike){
-      return `\n${object.date} 🚙 : ${object.eveningExplanation} in the evening.`;
+      return `${object.date} 🚙 : ${object.eveningExplanation} in the evening.`;
     }
   });
 
-  localExpressResult.send(decision);
+
+
+  localExpressResult.send(decision.join("<br>"));
+
 }
 
 function getDataFromOpenWeather(expressResult){
