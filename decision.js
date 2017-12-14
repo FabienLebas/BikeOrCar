@@ -51,10 +51,7 @@ function displayDecisions(groupByDate){
     }
   });
 
-
-
   localExpressResult.send(decision.join("<br>"));
-
 }
 
 function getDataFromOpenWeather(expressResult){
@@ -121,5 +118,8 @@ function getDataFromOpenWeather(expressResult){
 }
 
 module.exports = {
+  valueOr0: valueOr0,
+  groupByDate: groupByDate,
+  displayDecisions: displayDecisions,
   getDataFromOpenWeather: getDataFromOpenWeather
 };
