@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/FabienLebas/VeloOuVoiture/issues"
   },
-  "homepage": "https://github.com/FabienLebas/VeloOuVoiture#readme"
+  "homepage": "https://github.com/FabienLebas/VeloOuVoiture#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
 }

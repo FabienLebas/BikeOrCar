@@ -1,2 +1,4 @@
 .env
-myKeys.js
+package-lock.json
+coverage/
+node_modules/
