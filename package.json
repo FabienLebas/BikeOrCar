@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/FabienLebas/BikeOrCar#readme",
   "dependencies": {
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "request": "^2.83.0"
   }
 }
