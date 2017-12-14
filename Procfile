@@ -1,1 +1,1 @@
-web: node decisionForBrowser.js
+web: node index.js
