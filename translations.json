@@ -1,0 +1,66 @@
+{
+  "daysOfTheWeek": {
+    "0": {
+      "en": "Sunday",
+      "fr": "Dimanche"
+    },
+    "1": {
+      "en": "Monday",
+      "fr": "Lundi"
+    },
+    "2": {
+      "en": "Tuesday",
+      "fr": "Mardi"
+    },
+    "3": {
+      "en": "Wednesday",
+      "fr": "Mercredi"
+    },
+    "4": {
+      "en": "Thursday",
+      "fr": "Jeudi"
+    },
+    "5": {
+      "en": "Friday",
+      "fr": "Vendredi"
+    },
+    "6": {
+      "en": "Saturday",
+      "fr": "Samedi"
+    }
+  },
+  "rain": {
+    "en": "rain",
+    "fr": "pluie"
+  },
+  "snow": {
+    "en": "snow",
+    "fr": "neige"
+  },
+  "tooMuchWind": {
+    "en": "too much wind",
+    "fr": "trop de vent"
+  },
+  "tooCold": {
+    "en": "too cold",
+    "fr": "trop froid"
+  },
+  "inTheMorning": {
+    "en": "in the morning",
+    "fr": "le matin"
+  },
+  "and": {
+    "en": "and",
+    "fr": "et"
+  },
+  "inTheEvening": {
+    "en": "in the evening",
+    "fr": "le soir"
+  },
+  "forecastForTheComingDays": {
+    "en": "Forecasts for the coming days",
+    "fr": "Prévisions pour les jours à venir"
+  }
+
+
+}

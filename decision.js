@@ -1,6 +1,8 @@
 const request = require("request");
+const fs = require("fs");
 const appId = process.env.appId;
 
+const translations = JSON.parse(fs.readFileSync("./translations.json"));
 let localExpressResult;
 
 const userLimits = {
@@ -22,10 +24,9 @@ function valueOr0(object){
 }
 
 function groupByDate(selectedTimes){
-  const groupByDate = [];
+  const result = [];
   for (let i = 0; i<selectedTimes.length; i = i+2){
-  //  jourTemp = selectedTimes[i].date;
-      groupByDate.push({
+      result.push({
         date: selectedTimes[i].date,
         morningBike: selectedTimes[i].bikeDecision,
         morningExplanation: selectedTimes[i].bikeExplanation,
@@ -33,21 +34,34 @@ function groupByDate(selectedTimes){
         eveningExplanation: selectedTimes[i+1].bikeExplanation
       });
   }
-  displayDecisions(groupByDate);
+  return result;
 }
 
-function displayDecisions(groupByDate){
+function replaceDatesByDayText(groupedArray, language){
+  const days = JSON.parse(fs.readFileSync("./translations.json"));
+  return groupedArray.map((object) => {
+    return {
+      date: days.daysOfTheWeek[new Date(object.date).getDay().toString()][language],
+      morningBike: object.morningBike,
+      morningExplanation: object.morningExplanation,
+      eveningBike: object.eveningBike,
+      eveningExplanation: object.eveningExplanation
+    };
+  });
+}
+
+function displayDecisions(groupByDate, language){
   const decision = groupByDate.map((object) => {
     if (object.morningExplanation === "week-end"){
-      return `${object.date} week-end`;
+      return `${object.date} : week-end`;
     } else if (object.morningBike && object.eveningBike) {
-      return `${object.date} 🚲`;
+      return `${object.date} : 🚲`;
     } else if (!object.morningBike && !object.eveningBike){
-      return `${object.date} 🚙 : ${object.morningExplanation} in the morning and ${object.eveningExplanation} in the evening.`;
+      return `${object.date} : 🚙  _ ${object.morningExplanation} ` + translations.inTheMorning[language] + " " + translations.and[language] + `  ${object.eveningExplanation} `+ translations.inTheEvening[language];
     } else if (!object.morningBike && object.eveningBike){
-      return `${object.date} 🚙 : ${object.morningExplanation} in the morning.`;
+      return `${object.date} : 🚙  _ ${object.morningExplanation} ` + translations.inTheMorning[language];
     } else if (object.morningBike && !object.eveningBike){
-      return `${object.date} 🚙 : ${object.eveningExplanation} in the evening.`;
+      return `${object.date} : 🚙  _ ${object.eveningExplanation} ` + translations.inTheEvening[language];
     }
   });
 
@@ -59,11 +73,12 @@ function displayDecisions(groupByDate){
     "function gtag(){dataLayer.push(arguments);}" +
     "gtag('js', new Date());" +
     "gtag('config', 'UA-111318789-1');" +
-    "</script>" +
-    decision.join("<br>") + "</body>");
+    "</script></head>" +
+    "<h1>" + translations.forecastForTheComingDays[language] + "</h1><br>" +
+    decision.join("<br><br>") + "</body>");
 }
 
-function getDataFromOpenWeather(expressResult){
+function getDataFromOpenWeather(expressResult, language){
   localExpressResult = expressResult;
   request(
     {
@@ -92,13 +107,13 @@ function getDataFromOpenWeather(expressResult){
                 if (userLimits.daysOff.find((number) => number === dayParam) !== undefined){
                   this.bikeExplanation = "week-end";
                 } else if (userLimits.rain < this.rain){
-                  this.bikeExplanation = `rain ${this.rain}mm`;
+                  this.bikeExplanation = translations.rain[language] + ` ${this.rain}mm`;
                 } else if (userLimits.snow < this.snow){
-                  this.bikeExplanation = `snow ${this.snow}mm`;
+                  this.bikeExplanation = translations.snow[language] + ` ${this.snow}mm`;
                 } else if (userLimits.wind < this.wind){
-                  this.bikeExplanation = `too much wind ${this.wind}km/h`;
+                  this.bikeExplanation = translations.tooMuchWind[language] + ` ${this.wind}km/h`;
                 } else if (userLimits.temp < this.temp - 273.15){
-                  this.bikeExplanation = `too cold ${this.temp}°C`
+                  this.bikeExplanation = translations.tooCold[language] + ` ${this.temp}°C`
                 } else{
                   this.bikeDecision = true;
                 }
@@ -120,7 +135,9 @@ function getDataFromOpenWeather(expressResult){
         if (selectedTimes[selectedTimes.length - 1].hour === "09"){//21 not yet in the forecast
           selectedTimes.pop();
         }
-        groupByDate(selectedTimes);
+        const groupedByDate = groupByDate(selectedTimes);
+        const withDaysInText = replaceDatesByDayText(groupedByDate, language);
+        displayDecisions(withDaysInText, language);
       }
     }
   );
@@ -130,5 +147,6 @@ module.exports = {
   valueOr0: valueOr0,
   groupByDate: groupByDate,
   displayDecisions: displayDecisions,
+  replaceDatesByDayText: replaceDatesByDayText,
   getDataFromOpenWeather: getDataFromOpenWeather
 };
