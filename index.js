@@ -9,5 +9,9 @@ app.listen(port, function () {
 });
 
 app.get("/", function (request, result) {
-  decision.getDataFromOpenWeather(result, request.acceptsLanguages()[1]);
+  if(request.acceptsLanguages()[0].split("-")[0] === "fr"){//soon or "es"
+    decision.getDataFromOpenWeather(result, request.acceptsLanguages()[0].split("-")[0]);
+  } else {
+    decision.getDataFromOpenWeather(result, "en");
+  }
 });
