@@ -2,64 +2,79 @@
   "daysOfTheWeek": {
     "0": {
       "en": "Sunday",
-      "fr": "Dimanche"
+      "fr": "Dimanche",
+      "es": "Domingo"
     },
     "1": {
       "en": "Monday",
-      "fr": "Lundi"
+      "fr": "Lundi",
+      "es": "Lunes"
     },
     "2": {
       "en": "Tuesday",
-      "fr": "Mardi"
+      "fr": "Mardi",
+      "es": "Martes"
     },
     "3": {
       "en": "Wednesday",
-      "fr": "Mercredi"
+      "fr": "Mercredi",
+      "es": "Miércoles"
     },
     "4": {
       "en": "Thursday",
-      "fr": "Jeudi"
+      "fr": "Jeudi",
+      "es": "Jueves"
     },
     "5": {
       "en": "Friday",
-      "fr": "Vendredi"
+      "fr": "Vendredi",
+      "es": "Viernes"
     },
     "6": {
       "en": "Saturday",
-      "fr": "Samedi"
+      "fr": "Samedi",
+      "es": "Sábado"
     }
   },
   "rain": {
     "en": "rain",
-    "fr": "pluie"
+    "fr": "pluie",
+    "es": "lluvia"
   },
   "snow": {
     "en": "snow",
-    "fr": "neige"
+    "fr": "neige",
+    "es": "nieve"
   },
   "tooMuchWind": {
     "en": "too much wind",
-    "fr": "trop de vent"
+    "fr": "trop de vent",
+    "es": "demasiado viento"
   },
   "tooCold": {
     "en": "too cold",
-    "fr": "trop froid"
+    "fr": "trop froid",
+    "es": "demasiado frío"
   },
   "inTheMorning": {
     "en": "in the morning",
-    "fr": "le matin"
+    "fr": "le matin",
+    "es": "por la mañana"
   },
   "and": {
     "en": "and",
-    "fr": "et"
+    "fr": "et",
+    "es": "y"
   },
   "inTheEvening": {
     "en": "in the evening",
-    "fr": "le soir"
+    "fr": "le soir",
+    "es": "por la tarde"
   },
   "forecastForTheComingDays": {
     "en": "Forecasts for the coming days",
-    "fr": "Prévisions pour les jours à venir"
+    "fr": "Prévisions pour les jours à venir",
+    "es": "Pronóstico para los proximos días"
   }
 
 
