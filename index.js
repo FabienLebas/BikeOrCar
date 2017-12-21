@@ -3,7 +3,6 @@ const fetch = require("node-fetch");
 const fs = require("fs");
 const express = require("express");
 const app = express();
-const coordinates = require("./coordinates");
 
 const translations = JSON.parse(fs.readFileSync("./translations.json"));
 const language = "fr"; //temporaire
@@ -320,8 +319,6 @@ function replaceDatesByDayText(groupedArray, language){
 module.exports = {
   valueOr0: valueOr0,
   groupByDate: groupByDate,
-  displayDecisions: displayDecisions,
   replaceDatesByDayText: replaceDatesByDayText,
-  getDataFromOpenWeather: getDataFromOpenWeather,
   app: app
 };

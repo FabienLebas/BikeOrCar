@@ -1,0 +1,30 @@
+{% extends "layout.njk" %}
+
+{% block content %}
+<div class="container col-10 offset-1">
+  <p class="text-dark">Checking your coordinates to find your weather forecasts<br />
+    You should be redirected soon. Please authorize your geolocation from your browser.
+  </p>
+</div>
+
+<script>
+var options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0
+};
+function success(pos) {
+  const crd = pos.coords;
+
+  console.log('Votre position actuelle est :');
+  console.log("Latitude :" + crd.latitude);
+  console.log("Longitude:" + crd.longitude);
+  window.location = "/latitude/" + crd.latitude + "/longitude/" + crd.longitude;
+};
+
+function error(err) {
+  console.warn("ERROR(" + err.code + "): " + err.message);
+};
+  navigator.geolocation.getCurrentPosition(success, error, options);
+</script>
+{% endblock %}

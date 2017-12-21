@@ -20,6 +20,7 @@
     "express": "^4.16.2",
     "fs": "0.0.1-security",
     "node-fetch": "^1.7.3",
+    "nunjucks": "^3.0.1",
     "request": "^2.83.0"
   }
 }
