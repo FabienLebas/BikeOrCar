@@ -16,16 +16,12 @@ var options = {
 function success(pos) {
   const crd = pos.coords;
   document.getElementById("message").innerHTML = "Merci. Géolocalisation OK.<br />Je débute le téléchargement de la météo.";
-
-  console.log('Votre position actuelle est :');
-  console.log("Latitude :" + crd.latitude);
-  console.log("Longitude:" + crd.longitude);
   window.location = "/latitude/" + crd.latitude + "/longitude/" + crd.longitude;
 };
 
 function error(err) {
   console.warn("ERROR(" + err.code + "): " + err.message);
-  document.getElementById("message").innerHTML = "Erreur. Voici le message.<br />Code erreur : " + err.code + "<br />Message : " + err.message;
+  document.getElementById("message").innerHTML = "Erreur. Voici le message.<br />Code erreur : " + err.code + "<br />Message : " + err.message + "<br /> Cliquez ici pour ré-essayer sur <a href=\"https://bikeorcar.herokuapp.com\">https://bikeorcar.herokuapp.com</a>";
 };
 
   navigator.geolocation.getCurrentPosition(success, error, options);
