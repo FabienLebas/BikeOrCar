@@ -8,6 +8,7 @@
     <h1 class="display-5">{{data.city}}</h1>
     <div class="card-group">
       {% for object in data.returnedTimes %}
+      <div class="col-3-md">
         <div class="card">
           {% if object.morningBike and object.eveningBike %}
             <img class="card-img-top" src="/veloMatin.gif" alt="Card image cap">
@@ -24,6 +25,8 @@
           <p class="card-text">Matin : {{object.morningExplanation}}</p>
           <p class="card-text">Soir : {{object.eveningExplanation}}</p>
         </div>
+      </div>
+    </div>
       {% endfor %}
     </div>
   </div>

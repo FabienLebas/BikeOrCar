@@ -2,8 +2,8 @@
 
 {% block content %}
 <div class="container col-10 offset-1">
-  <p class="text-dark">Checking your coordinates to find your weather forecasts<br />
-    You should be redirected soon. Please authorize your geolocation from your browser.
+  <p class="text-dark" id="message">Géolocalisation...<br />
+    Merci d'accepter la géolocalisation pour récupérer automatiquement la météo de l'endroit où vous vous trouvez.
   </p>
 </div>
 
@@ -15,6 +15,7 @@ var options = {
 };
 function success(pos) {
   const crd = pos.coords;
+  document.getElementById("message").innerHTML = "Merci. Géolocalisation OK.<br />Je débute le téléchargement de la météo.";
 
   console.log('Votre position actuelle est :');
   console.log("Latitude :" + crd.latitude);
@@ -24,7 +25,9 @@ function success(pos) {
 
 function error(err) {
   console.warn("ERROR(" + err.code + "): " + err.message);
+  document.getElementById("message").innerHTML = "Erreur. Voici le message.<br />Code erreur : " + err.code + "<br />Message : " + err.message;
 };
+
   navigator.geolocation.getCurrentPosition(success, error, options);
 </script>
 {% endblock %}

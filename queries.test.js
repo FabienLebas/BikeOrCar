@@ -1,3 +1,4 @@
+//A refaire suite basculte nunjucks / node-fetch
 const fs = require("fs");
 const decision = require("./decision");
 
