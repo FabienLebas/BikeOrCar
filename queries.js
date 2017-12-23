@@ -119,6 +119,8 @@ function getWeatherFromCoordinates(latitude, longitude){
   })
 }
 
+
+
  // getWeatherFromCoordinates(50.641051499999996, 3.1380903)
  //   .then(result => console.log(result))
  // ;
