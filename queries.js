@@ -50,7 +50,8 @@ function replaceDatesByDayText(groupedArray, language){
 }
 
 function getWeatherFromCoordinates(latitude, longitude){
-  return fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&unit=metrics&lang=fr&APPID=${appId}`)
+  console.log(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=metric&lang=fr&APPID=${appId}`);
+  return fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=metric&lang=fr&APPID=${appId}`)
   .then(response => response.json())
   .then(returnedData => {
     const returnedTimes = returnedData.list.map(object => {
@@ -61,7 +62,7 @@ function getWeatherFromCoordinates(latitude, longitude){
       hour: object.dt_txt.split(" ")[1].split(":")[0],
       rain: Math.round(valueOr0(object.rain)*100)/100,
       snow: Math.round(valueOr0(object.snow)*100)/100,
-      temp: Math.round(object.main.temp - 273.15)*10/10,
+      temp: Math.round(object.main.temp)*10/10,
       wind: Math.round(object.wind.speed*100)/100,
       bikeExplanation: "",
       bikeDecision: false,
