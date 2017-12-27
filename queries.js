@@ -2,7 +2,14 @@ const fetch = require("node-fetch");
 const fs = require("fs");
 const translations = JSON.parse(fs.readFileSync("./translations.json"));
 const language = "fr"; //temporaire
-const appId = process.env.appId;
+const openWeatherId = process.env.appId;
+const PG = require("pg");
+const connectionString = process.env.connectionStringPGSQL;
+const client = new PG.Client({
+  connectionString: connectionString,
+  ssl: true
+});
+
 
 const userLimits = {
   rain: 0,
@@ -49,9 +56,26 @@ function replaceDatesByDayText(groupedArray, language){
   });
 }
 
+function addToDatabaseLogs(city, country, date){
+  client.connect();
+  client.query(
+    "SELECT number_of_connections FROM connections WHERE city = $1::text AND country = $2::text AND date = $3::date",
+    [city, country, date],
+    function(error, result) {
+      if (error) {
+        console.warn(error);
+      } else {
+        console.log(result.rows[0].number_of_connections);
+      }
+      client.end();
+    }
+  );
+}
+
+//addToDatabaseLogs("Roubaix", "fr", "2017-12-24");
+
 function getWeatherFromCoordinates(latitude, longitude){
-  console.log(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=metric&lang=fr&APPID=${appId}`);
-  return fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=metric&lang=fr&APPID=${appId}`)
+  return fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=metric&lang=fr&APPID=${openWeatherId}`)
   .then(response => response.json())
   .then(returnedData => {
     const returnedTimes = returnedData.list.map(object => {
@@ -75,10 +99,11 @@ function getWeatherFromCoordinates(latitude, longitude){
           this.bikeExplanation = translations.snow[language] + ` ${this.snow}mm`;
         } else if (userLimits.wind < this.wind){
           this.bikeExplanation = translations.tooMuchWind[language] + ` ${this.wind}km/h`;
-        } else if (userLimits.temp < this.temp){
+        } else if (userLimits.temp > this.temp){
           this.bikeExplanation = translations.tooCold[language] + ` ${this.temp}°C`
         } else{
           this.bikeDecision = true;
+          this.bikeExplanation = "OK";
         }
         }
       };

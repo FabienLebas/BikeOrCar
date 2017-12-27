@@ -21,6 +21,7 @@
     "fs": "0.0.1-security",
     "node-fetch": "^1.7.3",
     "nunjucks": "^3.0.1",
+    "pg": "^7.4.0",
     "request": "^2.83.0"
   }
 }

@@ -15,15 +15,13 @@
             {% elif object.morningBike and object.eveningBike %}
               <img class="card-img-top" src="/veloMatin.gif" alt="Card image cap">
             {% else %}
-              <img class="card-img-top" src="https://images.unsplash.com/photo-1428767801247-e664cd9e0df0?auto=format&fit=crop&w=1189&q=80" alt="Card image cap">
+              <img class="card-img-top" src="https://emojipedia-us.s3.amazonaws.com/thumbs/160/apple/118/umbrella-with-rain-drops_2614.png" alt="Card image cap">
           {% endif %}
           <div class="card-body">
           {% if object.morningExplanation === "week-end" %}
             <h4 class="card-title">{{object.date}} - {{object.morningExplanation}}</h4>
           {% elif object.morningBike and object.eveningBike%}
             <h4 class="card-title">{{object.date}} - Vélo</h4>
-            <p class="card-text">Matin : {{object.morningExplanation}}</p>
-            <p class="card-text">Soir : {{object.eveningExplanation}}</p>
           {% elif object.morningExplanation%}
             <h4 class="card-title">{{object.date}} - Voiture</h4>
             <p class="card-text">Matin : {{object.morningExplanation}}</p>
