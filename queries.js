@@ -5,11 +5,6 @@ const language = "fr"; //temporaire
 const openWeatherId = process.env.appId;
 const PG = require("pg");
 const connectionString = process.env.connectionStringPGSQL;
-const client = new PG.Client({
-  connectionString: connectionString,
-  ssl: true
-});
-
 
 const userLimits = {
   rain: 0,
@@ -57,6 +52,10 @@ function replaceDatesByDayText(groupedArray, language){
 }
 
 function addToDatabaseLogs(city, country, date){
+  const client = new PG.Client({
+    connectionString: connectionString,
+    ssl: true
+  });
   client.connect();
   client.query(
     "SELECT number_of_connections FROM connections WHERE city = $1::text AND country = $2::text AND date = $3::date",
@@ -64,19 +63,47 @@ function addToDatabaseLogs(city, country, date){
     function(error, result) {
       if (error) {
         console.warn(error);
+        client.end();
       } else {
-        console.log(result.rows[0].number_of_connections);
+        if (result.rows[0] === undefined) {
+          client.query(
+            "INSERT INTO connections (city, country, date, number_of_connections) VALUES ($1::text, $2::text, $3::date, 1)",
+            [city, country, date],
+            function(error2, result2){
+              if(error2){
+                console.warn(error2);
+              } else {
+                console.log("OK");
+              }
+              client.end();
+            }
+          );
+        } else {
+          client.query(
+            "UPDATE connections SET number_of_connections = $4::integer WHERE city = $1::text AND country = $2::text AND date = $3::date",
+            [city, country, date, result.rows[0].number_of_connections + 1],
+            function(error2, result2){
+              if(error2){
+                console.warn(error2);
+              } else {
+                console.log("OK");
+              }
+              client.end();
+            }
+          );
+        }
       }
-      client.end();
     }
   );
 }
 
-//addToDatabaseLogs("Roubaix", "fr", "2017-12-24");
-
 function getWeatherFromCoordinates(latitude, longitude){
   return fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=metric&lang=fr&APPID=${openWeatherId}`)
   .then(response => response.json())
+  .then(returnedData => {
+    addToDatabaseLogs(returnedData.city.name, returnedData.city.country, returnedData.list[0].dt_txt.split(" ")[0]);
+    return returnedData;
+  })
   .then(returnedData => {
     const returnedTimes = returnedData.list.map(object => {
       const resultMap = {
@@ -144,12 +171,6 @@ function getWeatherFromCoordinates(latitude, longitude){
     return object;
   })
 }
-
-
-
- // getWeatherFromCoordinates(50.641051499999996, 3.1380903)
- //   .then(result => console.log(result))
- // ;
 
 module.exports = {
   getWeatherFromCoordinates: getWeatherFromCoordinates
