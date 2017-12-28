@@ -4,7 +4,7 @@ const translations = JSON.parse(fs.readFileSync("./translations.json"));
 const language = "fr"; //temporaire
 const openWeatherId = process.env.appId;
 const PG = require("pg");
-const connectionString = process.env.connectionStringPGSQL;
+const connectionString = process.env.DATABASE_URL;
 
 const userLimits = {
   rain: 0,
