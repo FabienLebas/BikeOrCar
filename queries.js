@@ -72,8 +72,6 @@ function addToDatabaseLogs(city, country, date){
             function(error2, result2){
               if(error2){
                 console.warn(error2);
-              } else {
-                console.log("OK");
               }
               client.end();
             }
@@ -85,8 +83,6 @@ function addToDatabaseLogs(city, country, date){
             function(error2, result2){
               if(error2){
                 console.warn(error2);
-              } else {
-                console.log("OK");
               }
               client.end();
             }
@@ -112,6 +108,7 @@ function getWeatherFromCoordinates(latitude, longitude){
       day: (new Date(object.dt_txt.split(" ")[0])).getDay(),
       hour: object.dt_txt.split(" ")[1].split(":")[0],
       rain: Math.round(valueOr0(object.rain)*100)/100,
+      description: object.weather[0].description,
       snow: Math.round(valueOr0(object.snow)*100)/100,
       temp: Math.round(object.main.temp)*10/10,
       wind: Math.round(object.wind.speed*100)/100,
@@ -121,7 +118,7 @@ function getWeatherFromCoordinates(latitude, longitude){
         if (userLimits.daysOff.find((number) => number === dayParam) !== undefined){
           this.bikeExplanation = "week-end";
         } else if (userLimits.rain < this.rain){
-          this.bikeExplanation = translations.rain[language] + ` ${this.rain}mm`;
+          this.bikeExplanation = translations.rain[language] + ` - ${this.description}`;
         } else if (userLimits.snow < this.snow){
           this.bikeExplanation = translations.snow[language] + ` ${this.snow}mm`;
         } else if (userLimits.wind < this.wind){
