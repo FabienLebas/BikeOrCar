@@ -170,5 +170,9 @@ function getWeatherFromCoordinates(latitude, longitude){
 }
 
 module.exports = {
+  valueOr0: valueOr0,
+  groupByDate: groupByDate,
+  replaceDatesByDayText: replaceDatesByDayText,
+  addToDatabaseLogs: addToDatabaseLogs,
   getWeatherFromCoordinates: getWeatherFromCoordinates
 };
