@@ -27,3 +27,7 @@ app.get("/latitude/:lat/longitude/:long", function (request, result) {
   queries.getWeatherFromCoordinates(request.params.lat, request.params.long)
     .then(data => result.render("weather", {data: data}));
 });
+
+app.get("/parameters", function(request, result) {
+  result.render("parameters");
+});

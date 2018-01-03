@@ -2,7 +2,7 @@ const fetch = require("node-fetch");
 const fs = require("fs");
 const translations = JSON.parse(fs.readFileSync("./translations.json"));
 const language = "fr"; //temporaire
-const openWeatherId = process.env.appId;
+const openWeatherId = process.env.openWeatherId;
 const PG = require("pg");
 const connectionString = process.env.DATABASE_URL;
 
@@ -92,6 +92,8 @@ function addToDatabaseLogs(city, country, date){
     }
   );
 }
+
+addToDatabaseLogs("test", "fr", "2018-01-04");
 
 function getWeatherFromCoordinates(latitude, longitude){
   return fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=metric&lang=fr&APPID=${openWeatherId}`)

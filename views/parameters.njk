@@ -1,0 +1,112 @@
+{% extends "layout.njk" %}
+
+{% block content %}
+<form class="container">
+  <h2>Paramètres de décision</h2>
+  <div class="card">
+    <h4 class="card-header">Vos limites pour aller en vélo</h4>
+    <div class="card-body">
+      <table>
+        <tr>
+          <td>
+            <label>Pluie max <span class="text-muted">(en mm)</span></label>
+          </td>
+          <td>
+            <input class="form-control" id="rainMax" placeholder="0" type="float">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label>Neige max <span class="text-muted">(en mm)</span></label>
+          </td>
+          <td>
+            <input class="form-control" id="snowMax" placeholder="0" type="float">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label>Vent max <span class="text-muted">(en km/h)</span></label>
+          </td>
+          <td>
+            <input class="form-control" id="windMax" placeholder="50" type="float">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label>Température min <span class="text-muted">(en °C)</span></label>
+          </td>
+          <td>
+            <input class="form-control" id="rainMax" placeholder="3" type="float">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label>Température max <span class="text-muted">(en °C)</span></label>
+          </td>
+          <td>
+            <input class="form-control" id="rainMax" placeholder="30" type="float">
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="card">
+    <h4 class="card-header">Quand ?</h4>
+    <div class="card-body">
+      <table class="table">
+        <tr>
+          <td>Lundi</td><td><input class="form-check-input" type="checkbox" value="" id="monday" checked></td>
+        </tr>
+        <tr>
+          <td>Mardi</td><td><input class="form-check-input" type="checkbox" value="" id="tuesday" checked></td>
+        </tr>
+        <tr>
+          <td>Mercredi</td><td><input class="form-check-input" type="checkbox" value="" id="wednesday" checked></td>
+        </tr>
+        <tr>
+          <td>Jeudi</td><td><input class="form-check-input" type="checkbox" value="" id="thursday" checked></td>
+        </tr>
+        <tr>
+          <td>Vendredi</td><td><input class="form-check-input" type="checkbox" value="" id="friday" checked></td>
+        </tr>
+        <tr>
+          <td>Samedi</td><td><input class="form-check-input" type="checkbox" value="" id="saturday"></td>
+        </tr>
+        <tr>
+          <td>Dimanche</td><td><input class="form-check-input" type="checkbox" value="" id="sunday"></td>
+        </tr>
+      </table>
+    </div>
+    <div class="card-body">
+      <table class="table">
+        <tr>
+          <td>
+            <label for="morning">Matin </label>
+          </td>
+          <td>
+            <select class="form-control" id="morning">
+              <option value="6h">6h-9h</option>
+              <option value="9h">9h-12h</option>
+              <option value="3h">3h-6h</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="afternoon">Après-midi</label>
+          </td>
+          <td>
+            <select class="form-control" id="afternoon">
+              <option value="18h">18h-21h</option>
+              <option value="15h">15h-18h</option>
+              <option value="12h">12h-15h</option>
+            </select>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary">Enregistrer</button>
+</form>
+
+{% endblock %}
