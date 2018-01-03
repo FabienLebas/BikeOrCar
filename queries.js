@@ -93,8 +93,6 @@ function addToDatabaseLogs(city, country, date){
   );
 }
 
-addToDatabaseLogs("test", "fr", "2018-01-04");
-
 function getWeatherFromCoordinates(latitude, longitude){
   return fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=metric&lang=fr&APPID=${openWeatherId}`)
   .then(response => response.json())
