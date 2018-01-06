@@ -31,3 +31,7 @@ app.get("/latitude/:lat/longitude/:long", function (request, result) {
 app.get("/parameters", function(request, result) {
   result.render("parameters");
 });
+
+app.get("/whoweare", function(request, result){
+  result.render("whoweare");
+});

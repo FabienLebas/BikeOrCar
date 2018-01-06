@@ -1,7 +1,6 @@
 {% extends "layout.njk" %}
-
 {% block content %}
-<div class="container col-10 offset-1">
+<div class="container-fluid col-10 offset-1">
   <div class="alert alert-primary" role="alert" id="message">
     Géolocalisation en cours... pour récupérer les prévisions météo du lieu où vous êtes<br />
   </div>
@@ -14,11 +13,9 @@
         <li>le vent</li>
       </ul>
   </p>
-  <p>
-    Chaque matin, un petit coup d'oeil à l'application. Aller au travail en vélo sera toujours un plaisir. Pas de galère, pas de surprise.
-  </p>
+  <p>Chaque matin, un petit coup d'oeil à l'application.</p>
+  <p>Aller au travail en vélo sera toujours un plaisir. Pas de galère, pas de surprise.</p>
 </div>
-
 <script>
 var options = {
   enableHighAccuracy: true,
@@ -38,4 +35,4 @@ function error(err) {
 
   navigator.geolocation.getCurrentPosition(success, error, options);
 </script>
-{% endblock %}
+{% endblock content %}
