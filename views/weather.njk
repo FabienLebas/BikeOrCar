@@ -3,34 +3,41 @@
 {% block content %}
 <div class="jumbotron jumbotron-fluid">
   <div class="container">
-  <div class="container">
+    <h2 class="display-5 text-center font-weight-normal">{{forecast.city}}</h2>
+    <p class="text-center">{{currentWeather.weather.description}}, vent {{currentWeather.windSpeed}} km/h de {{currentWeather.windDirection}}</p>
+    <h1 class="display-5 text-center font-weight-normal">{{currentWeather.temperature}}°</h1>
   </div>
-    <h1 class="display-5">{{data.city}}</h1>
-    <div class="card-group">
-      {% for object in data.returnedTimes %}
-      <div class="col-3-md">
-        <div class="card">
-          {% if object.morningExplanation === "week-end" %}
-            {% elif object.morningBike and object.eveningBike %}
-              <img class="card-img-top" src="/veloMatin.gif" alt="Card image cap">
+  <div class="container">
+    <table class="table">
+      <thead>
+        <tr>
+          <td scope="col"></td>
+          <td scope="col"></td>
+          <td scope="col">Matin</td>
+          <td scope="col">Après-midi</td>
+        </tr>
+      </thead>
+      <tbody>
+        {% for object in forecast.returnedTimes %}
+        <tr>
+          <td scope="row">{{object.date}}</td>
+          <td>
+            {% if object.morningBike and object.eveningBike %}
+              <img class="card-img-top" src="http://www.atelierjespers.com/images/pharrell%20williams%20-%20velo%20bleu.jpg" alt="Card image cap">
             {% else %}
               <img class="card-img-top" src="http://www2.mes-coloriages-preferes.biz/colorino/Images/Large/Vehicules-Voiture-MINI-110563.png" alt="Card image cap">
-          {% endif %}
-          <div class="card-body">
-          {% if object.morningExplanation === "week-end" %}
-            <h4 class="card-title">{{object.date}} - {{object.morningExplanation}}</h4>
-          {% elif object.morningBike and object.eveningBike%}
-            <h4 class="card-title">{{object.date}} - Vélo</h4>
-          {% elif object.morningExplanation%}
-            <h4 class="card-title">{{object.date}} - Voiture</h4>
-            <p class="card-text">Matin : {{object.morningExplanation}}</p>
-            <p class="card-text">Soir : {{object.eveningExplanation}}</p>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-      {% endfor %}
-    </div>
+            {% endif %}
+          </td>
+          <td>{{object.morningTemp}}°<br />
+            <img class="card-img-top" src={{object.morningIcon}} alt="Weather icon" />
+          </td>
+          <td>{{object.eveningTemp}}°<br />
+            <img class="card-img-top" src={{object.eveningIcon}} alt="Weather icon" />
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
 </div>
 {% endblock %}

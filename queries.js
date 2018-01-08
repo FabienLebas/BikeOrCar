@@ -31,8 +31,12 @@ function groupByDate(selectedTimes){
         date: selectedTimes[i].date,
         morningBike: selectedTimes[i].bikeDecision,
         morningExplanation: selectedTimes[i].bikeExplanation,
+        morningTemp: selectedTimes[i].temp,
+        morningIcon: selectedTimes[i].icon,
         eveningBike: selectedTimes[i+1].bikeDecision,
-        eveningExplanation: selectedTimes[i+1].bikeExplanation
+        eveningExplanation: selectedTimes[i+1].bikeExplanation,
+        eveningTemp: selectedTimes[i+1].temp,
+        eveningIcon: selectedTimes[i+1].icon
       });
   }
   return result;
@@ -45,8 +49,12 @@ function replaceDatesByDayText(groupedArray, language){
       date: days.daysOfTheWeek[new Date(object.date).getDay().toString()][language],
       morningBike: object.morningBike,
       morningExplanation: object.morningExplanation,
+      morningTemp: object.morningTemp,
+      morningIcon: object.morningIcon,
       eveningBike: object.eveningBike,
-      eveningExplanation: object.eveningExplanation
+      eveningExplanation: object.eveningExplanation,
+      eveningTemp: object.eveningTemp,
+      eveningIcon: object.eveningIcon
     };
   });
 }
@@ -93,6 +101,28 @@ function addToDatabaseLogs(city, country, date){
   );
 }
 
+function convertWindDegreesToText(degrees){
+  const text = ["Nord", "Nord-Est", "Est", "Sud-Est", "Sud", "Sud-Ouest", "Ouest", "Nord-Ouest"];
+  return text[Math.round(degrees / 45) % 8];
+}
+
+function getTodayWeather(latitude, longitude){
+  return fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&lang=fr&APPID=${openWeatherId}`)
+    .then(response => response.json())
+    .then(returnedData => {
+      const result = {
+        weather: returnedData.weather[0],
+        temperature: Math.round(returnedData.main.temp),
+        windSpeed:Math.round(returnedData.wind.speed),
+        windDirection: convertWindDegreesToText(returnedData.wind.deg)
+      };
+      return result;
+    })
+    .catch(error => {
+      console.warn("Error while getting current weather:" + error);
+    })
+}
+
 function getWeatherFromCoordinates(latitude, longitude){
   return fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=metric&lang=fr&APPID=${openWeatherId}`)
   .then(response => response.json())
@@ -103,34 +133,36 @@ function getWeatherFromCoordinates(latitude, longitude){
   .then(returnedData => {
     const returnedTimes = returnedData.list.map(object => {
       const resultMap = {
-      time: object.dt_txt,
-      date: object.dt_txt.split(" ")[0],
-      day: (new Date(object.dt_txt.split(" ")[0])).getDay(),
-      hour: object.dt_txt.split(" ")[1].split(":")[0],
-      rain: Math.round(valueOr0(object.rain)*100)/100,
-      description: object.weather[0].description,
-      snow: Math.round(valueOr0(object.snow)*100)/100,
-      temp: Math.round(object.main.temp)*10/10,
-      wind: Math.round(object.wind.speed*100)/100,
-      bikeExplanation: "",
-      bikeDecision: false,
-      bike : function(dayParam){
-        if (userLimits.daysOff.find((number) => number === dayParam) !== undefined){
-          this.bikeExplanation = "week-end";
-        } else if (userLimits.rain < this.rain){
-          this.bikeExplanation = translations.rain[language] + ` - ${this.description}`;
-        } else if (userLimits.snow < this.snow){
-          this.bikeExplanation = translations.snow[language] + ` ${this.snow}mm`;
-        } else if (userLimits.wind < this.wind){
-          this.bikeExplanation = translations.tooMuchWind[language] + ` ${this.wind}km/h`;
-        } else if (userLimits.temp > this.temp){
-          this.bikeExplanation = translations.tooCold[language] + ` ${this.temp}°C`
-        } else{
-          this.bikeDecision = true;
-          this.bikeExplanation = "OK";
-        }
-        }
-      };
+        time: object.dt_txt,
+        date: object.dt_txt.split(" ")[0],
+        day: (new Date(object.dt_txt.split(" ")[0])).getDay(),
+        hour: object.dt_txt.split(" ")[1].split(":")[0],
+        rain: Math.round(valueOr0(object.rain)*100)/100,
+        description: object.weather[0].description,
+        snow: Math.round(valueOr0(object.snow)*100)/100,
+        temp: Math.round(object.main.temp)*10/10,
+        wind: Math.round(object.wind.speed*100)/100,
+        weatherId: object.weather[0].id,
+        icon: `http://openweathermap.org/img/w/${object.weather[0].icon}.png`,
+        bikeExplanation: "",
+        bikeDecision: false,
+        bike : function(dayParam){
+        /*  if (userLimits.daysOff.find((number) => number === dayParam) !== undefined){
+            this.bikeExplanation = "week-end";
+          } else*/ if (userLimits.rain < this.rain){
+            this.bikeExplanation = translations.rain[language] + ` - ${this.description}`;
+          } else if (userLimits.snow < this.snow){
+            this.bikeExplanation = translations.snow[language] + ` ${this.snow}mm`;
+          } else if (userLimits.wind < this.wind){
+            this.bikeExplanation = translations.tooMuchWind[language] + ` ${this.wind}km/h`;
+          } else if (userLimits.temp > this.temp){
+            this.bikeExplanation = translations.tooCold[language] + ` ${this.temp}°C`
+          } else{
+            this.bikeDecision = true;
+            this.bikeExplanation = "OK";
+          }
+          }
+        };
       return resultMap;
     });
     const returnedObject = {
@@ -174,5 +206,6 @@ module.exports = {
   groupByDate: groupByDate,
   replaceDatesByDayText: replaceDatesByDayText,
   addToDatabaseLogs: addToDatabaseLogs,
+  getTodayWeather: getTodayWeather,
   getWeatherFromCoordinates: getWeatherFromCoordinates
 };
