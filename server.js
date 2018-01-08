@@ -24,8 +24,10 @@ app.get("/", function(request, result) {
 });
 
 app.get("/latitude/:lat/longitude/:long", function (request, result) {
-  queries.getWeatherFromCoordinates(request.params.lat, request.params.long)
-    .then(data => result.render("weather", {data: data}));
+  Promise.all([queries.getTodayWeather(request.params.lat, request.params.long), queries.getWeatherFromCoordinates(request.params.lat, request.params.long)])
+    .then(data => result.render("weather", {
+      currentWeather: data[0],
+      forecast: data[1]}));
 });
 
 app.get("/parameters", function(request, result) {
