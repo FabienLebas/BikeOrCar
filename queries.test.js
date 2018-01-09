@@ -48,3 +48,11 @@ describe("Testing valueOr0", () => {
 //     }]);
 //   });
 // });
+
+describe("I should be able to connect to Google API", () => {
+  expect.assertions(1);
+  queries.getCityName(50.6793967,3.1836043)
+    .then(city => {
+      expect(city).toBe("Roubaix");
+    });
+});

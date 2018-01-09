@@ -3,6 +3,8 @@ const fs = require("fs");
 const translations = JSON.parse(fs.readFileSync("./translations.json"));
 const language = "fr"; //temporaire
 const openWeatherId = process.env.openWeatherId;
+const wundergroundId = process.env.wundergroundId;
+const googleAPIKey = process.env.googleAPIKey;
 const PG = require("pg");
 const connectionString = process.env.DATABASE_URL;
 
@@ -28,7 +30,7 @@ function groupByDate(selectedTimes){
   const result = [];
   for (let i = 0; i<selectedTimes.length; i = i+2){
       result.push({
-        date: selectedTimes[i].date,
+        date: selectedTimes[i].day,
         morningBike: selectedTimes[i].bikeDecision,
         morningExplanation: selectedTimes[i].bikeExplanation,
         morningTemp: selectedTimes[i].temp,
@@ -179,6 +181,105 @@ function getWeatherFromCoordinates(latitude, longitude){
   })
   .then(object => {
     object.returnedTimes = object.returnedTimes.filter((object2) => {
+      if (object2.hour === "08" || object2.hour === "18"){
+        return object2;
+      }
+    });
+    if (object.returnedTimes[0].hour === "18"){// if it's already afternoon, you already took your decision
+      object.returnedTimes.splice(0,1);
+    }
+    if (object.returnedTimes[object.returnedTimes.length - 1].hour === "08"){//21 not yet in the forecast
+      object.returnedTimes.pop();
+    }
+    return object;
+  })
+  .then(object => {
+    object.returnedTimes = groupByDate(object.returnedTimes);
+    return object;
+  })
+  .then(object => {
+    object.returnedTimes = replaceDatesByDayText(object.returnedTimes, language);
+    return object;
+  })
+}
+
+function getCityName(latitude, longitude){
+  return fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${googleAPIKey}`)
+    .then(result => result.json())
+    .then(returnedData => {
+      const today = new Date();
+      const formattedDate = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+      const result={
+        city: returnedData.results[1].address_components[0].long_name,
+        country: returnedData.results[1].formatted_address.split(",")[1],
+        date: formattedDate
+      };
+      return result;
+    })
+    .then(location => {
+      addToDatabaseLogs(location.city, location.country, location.date);
+      return location.city;
+    })
+    .catch(error => {
+      console.warn("Google API error : " + error);
+    })
+}
+
+function getWeatherFromCoordinatesWunderground(latitude, longitude){
+  return fetch(`https://api.wunderground.com/api/${wundergroundId}/hourly10day/lang:FR/q/${latitude},${longitude}.json`)
+  .then(response => response.json())
+  .then(returnedData => {
+    const returnedTimes = returnedData.hourly_forecast.map(object => {
+      const resultMap = {
+    //    time: object.FCTTIME.hour,
+        date: `${object.FCTTIME.year}-${object.FCTTIME.mon}-${object.FCTTIME.mday}`,
+        day: object.FCTTIME.weekday_name,
+        hour: object.FCTTIME.hour_padded,
+        rain: object.qpf.metric,
+        description: object.condition,
+        snow: object.snow.metric,
+        temp: object.temp.metric,
+        wind: object.wspd.metric,
+        fctcode: object.fctcode,
+        icon: object.icon_url,
+        bikeExplanation: "",
+        bikeDecision: false,
+        bike : function(dayParam){
+          /*  if (userLimits.daysOff.find((number) => number === dayParam) !== undefined){
+              this.bikeExplanation = "week-end";
+            } else if (userLimits.rain < this.rain){
+              this.bikeExplanation = translations.rain[language] + ` - ${this.description}`;
+            } else if (userLimits.snow < this.snow){
+              this.bikeExplanation = translations.snow[language] + ` ${this.snow}mm`;
+            } else if (userLimits.wind < this.wind){
+              this.bikeExplanation = translations.tooMuchWind[language] + ` ${this.wind}km/h`;
+            } else if (userLimits.temp > this.temp){
+              this.bikeExplanation = translations.tooCold[language] + ` ${this.temp}°C`
+            }*/
+            if(this.fctcode > 8 || this.temp < userLimits.temp) {
+              this.bikeDecision = false;
+            }
+             else{
+            this.bikeDecision = true;
+            this.bikeExplanation = "OK";
+          }
+          }
+        };
+      return resultMap;
+    });
+    const returnedObject = {
+        returnedTimes: returnedTimes
+    };
+    return returnedObject;
+  })
+  .then(object => {
+    object.returnedTimes.forEach((object2) => {
+      object2.bike(object2.day);
+    });
+    return object;
+  })
+  .then(object => {
+    object.returnedTimes = object.returnedTimes.filter((object2) => {
       if (object2.hour === "09" || object2.hour === "21"){
         return object2;
       }
@@ -195,10 +296,10 @@ function getWeatherFromCoordinates(latitude, longitude){
     object.returnedTimes = groupByDate(object.returnedTimes);
     return object;
   })
-  .then(object => {
-    object.returnedTimes = replaceDatesByDayText(object.returnedTimes, language);
-    return object;
-  })
+  // .then(object => {
+  //   object.returnedTimes = replaceDatesByDayText(object.returnedTimes, language);
+  //   return object;
+  // })
 }
 
 module.exports = {
@@ -207,5 +308,7 @@ module.exports = {
   replaceDatesByDayText: replaceDatesByDayText,
   addToDatabaseLogs: addToDatabaseLogs,
   getTodayWeather: getTodayWeather,
-  getWeatherFromCoordinates: getWeatherFromCoordinates
+  getWeatherFromCoordinates: getWeatherFromCoordinates,
+  getCityName:getCityName,
+  getWeatherFromCoordinatesWunderground:getWeatherFromCoordinatesWunderground
 };
