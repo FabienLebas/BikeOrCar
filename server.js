@@ -24,10 +24,12 @@ app.get("/", function(request, result) {
 });
 
 app.get("/latitude/:lat/longitude/:long", function (request, result) {
-  Promise.all([queries.getTodayWeather(request.params.lat, request.params.long), queries.getWeatherFromCoordinates(request.params.lat, request.params.long)])
+  Promise.all([queries.getTodayWeather(request.params.lat, request.params.long), queries.getWeatherFromCoordinatesWunderground(request.params.lat, request.params.long), queries.getCityName(request.params.lat, request.params.long)])
     .then(data => result.render("weather", {
       currentWeather: data[0],
-      forecast: data[1]}));
+      forecast: data[1],
+      city: data[2]
+    }));
 });
 
 app.get("/parameters", function(request, result) {

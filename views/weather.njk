@@ -3,7 +3,7 @@
 {% block content %}
 <div class="jumbotron jumbotron-fluid">
   <div class="container">
-    <h2 class="display-5 text-center font-weight-normal">{{forecast.city}}</h2>
+    <h2 class="display-5 text-center font-weight-normal">{{city}}</h2>
     <p class="text-center">{{currentWeather.weather.description}}, vent {{currentWeather.windSpeed}} km/h de {{currentWeather.windDirection}}</p>
     <h1 class="display-5 text-center font-weight-normal">{{currentWeather.temperature}}°</h1>
   </div>
@@ -11,10 +11,10 @@
     <table class="table">
       <thead>
         <tr>
-          <td scope="col"></td>
-          <td scope="col"></td>
-          <td scope="col">Matin</td>
-          <td scope="col">Après-midi</td>
+          <td></td>
+          <td></td>
+          <td> 8h </td>
+          <td> 18h </td>
         </tr>
       </thead>
       <tbody>
