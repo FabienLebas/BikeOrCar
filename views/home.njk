@@ -19,7 +19,7 @@
 <script>
 var options = {
   enableHighAccuracy: true,
-  timeout: 10000,
+  timeout: 30000,
   maximumAge: 0
 };
 function success(pos) {
@@ -30,7 +30,7 @@ function success(pos) {
 
 function error(err) {
   console.warn("ERROR(" + err.code + "): " + err.message);
-  document.getElementById("message").innerHTML = "Erreur. Voici le message.<br />Code erreur : " + err.code + "<br />Message : " + err.message + "<br /> Cliquez ici pour ré-essayer sur <a href=\"https://bikeorcar.herokuapp.com\">https://bikeorcar.herokuapp.com</a>";
+  document.getElementById("message").innerHTML = "Erreur. Voici le message.<br />Code erreur : " + err.code + "<br />Message : " + err.message + "<br /> Cliquez ici pour ré-essayer : <a href=\"https://bikeorcar.herokuapp.com\">https://bikeorcar.herokuapp.com</a><br />Sur iPhone, la géolocalisation s'active en allant dans Réglages / Confidentialité / Service de localisation / Safari";
 };
 
   navigator.geolocation.getCurrentPosition(success, error, options);
