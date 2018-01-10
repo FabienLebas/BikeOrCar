@@ -30,24 +30,6 @@ describe("Testing valueOr0", () => {
 //   } );
 // });
 //
-// describe("Testing replaceDatesByDayText", () => {
-//   test("Check that it can transform 0 to Sunday", () => {
-//     const myArray = [{
-//       date: "2017-12-17",
-//       morningBike: "",
-//       morningExplanation: "",
-//       eveningBike: "",
-//       eveningExplanation: ""
-//     }];
-//     expect(queries.replaceDatesByDayText(myArray, "en")).toEqual([{
-//       date: "Sunday",
-//       morningBike: "",
-//       morningExplanation: "",
-//       eveningBike: "",
-//       eveningExplanation: ""
-//     }]);
-//   });
-// });
 
 describe("I should be able to connect to Google API", () => {
   expect.assertions(1);
