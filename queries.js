@@ -41,24 +41,18 @@ function groupByDate(selectedTimes){
         eveningIcon: selectedTimes[i+1].icon
       });
   }
+  result[0].date = tomorrowOrToday(result[0].date);
   return result;
 }
 
-function replaceDatesByDayText(groupedArray, language){
-  const days = JSON.parse(fs.readFileSync("./translations.json"));
-  return groupedArray.map((object) => {
-    return {
-      date: days.daysOfTheWeek[new Date(object.date).getDay().toString()][language],
-      morningBike: object.morningBike,
-      morningExplanation: object.morningExplanation,
-      morningTemp: object.morningTemp,
-      morningIcon: object.morningIcon,
-      eveningBike: object.eveningBike,
-      eveningExplanation: object.eveningExplanation,
-      eveningTemp: object.eveningTemp,
-      eveningIcon: object.eveningIcon
-    };
-  });
+function tomorrowOrToday(weekday){
+  const today = new Date();
+  const day = today.getDay();
+  const testDays = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+  if(weekday === testDays[day]){
+    return "aujourd'hui";
+  }
+  return "demain";
 }
 
 function addToDatabaseLogs(city, country, date){
@@ -123,84 +117,6 @@ function getTodayWeather(latitude, longitude){
     .catch(error => {
       console.warn("Error while getting current weather:" + error);
     })
-}
-
-function getWeatherFromCoordinates(latitude, longitude){
-  return fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=metric&lang=fr&APPID=${openWeatherId}`)
-  .then(response => response.json())
-  .then(returnedData => {
-    addToDatabaseLogs(returnedData.city.name, returnedData.city.country, returnedData.list[0].dt_txt.split(" ")[0]);
-    return returnedData;
-  })
-  .then(returnedData => {
-    const returnedTimes = returnedData.list.map(object => {
-      const resultMap = {
-        time: object.dt_txt,
-        date: object.dt_txt.split(" ")[0],
-        day: (new Date(object.dt_txt.split(" ")[0])).getDay(),
-        hour: object.dt_txt.split(" ")[1].split(":")[0],
-        rain: Math.round(valueOr0(object.rain)*100)/100,
-        description: object.weather[0].description,
-        snow: Math.round(valueOr0(object.snow)*100)/100,
-        temp: Math.round(object.main.temp)*10/10,
-        wind: Math.round(object.wind.speed*100)/100,
-        weatherId: object.weather[0].id,
-        icon: `http://openweathermap.org/img/w/${object.weather[0].icon}.png`,
-        bikeExplanation: "",
-        bikeDecision: false,
-        bike : function(dayParam){
-        /*  if (userLimits.daysOff.find((number) => number === dayParam) !== undefined){
-            this.bikeExplanation = "week-end";
-          } else*/ if (userLimits.rain < this.rain){
-            this.bikeExplanation = translations.rain[language] + ` - ${this.description}`;
-          } else if (userLimits.snow < this.snow){
-            this.bikeExplanation = translations.snow[language] + ` ${this.snow}mm`;
-          } else if (userLimits.wind < this.wind){
-            this.bikeExplanation = translations.tooMuchWind[language] + ` ${this.wind}km/h`;
-          } else if (userLimits.temp > this.temp){
-            this.bikeExplanation = translations.tooCold[language] + ` ${this.temp}°C`
-          } else{
-            this.bikeDecision = true;
-            this.bikeExplanation = "OK";
-          }
-          }
-        };
-      return resultMap;
-    });
-    const returnedObject = {
-        city: returnedData.city.name,
-        returnedTimes: returnedTimes
-    };
-    return returnedObject;
-  })
-  .then(object => {
-    object.returnedTimes.forEach((object2) => {
-      object2.bike(object2.day);
-    });
-    return object;
-  })
-  .then(object => {
-    object.returnedTimes = object.returnedTimes.filter((object2) => {
-      if (object2.hour === "08" || object2.hour === "18"){
-        return object2;
-      }
-    });
-    if (object.returnedTimes[0].hour === "18"){// if it's already afternoon, you already took your decision
-      object.returnedTimes.splice(0,1);
-    }
-    if (object.returnedTimes[object.returnedTimes.length - 1].hour === "08"){//21 not yet in the forecast
-      object.returnedTimes.pop();
-    }
-    return object;
-  })
-  .then(object => {
-    object.returnedTimes = groupByDate(object.returnedTimes);
-    return object;
-  })
-  .then(object => {
-    object.returnedTimes = replaceDatesByDayText(object.returnedTimes, language);
-    return object;
-  })
 }
 
 function getCityName(latitude, longitude){
@@ -296,19 +212,13 @@ function getWeatherFromCoordinatesWunderground(latitude, longitude){
     object.returnedTimes = groupByDate(object.returnedTimes);
     return object;
   })
-  // .then(object => {
-  //   object.returnedTimes = replaceDatesByDayText(object.returnedTimes, language);
-  //   return object;
-  // })
 }
 
 module.exports = {
   valueOr0: valueOr0,
   groupByDate: groupByDate,
-  replaceDatesByDayText: replaceDatesByDayText,
   addToDatabaseLogs: addToDatabaseLogs,
   getTodayWeather: getTodayWeather,
-  getWeatherFromCoordinates: getWeatherFromCoordinates,
   getCityName:getCityName,
   getWeatherFromCoordinatesWunderground:getWeatherFromCoordinatesWunderground
 };
