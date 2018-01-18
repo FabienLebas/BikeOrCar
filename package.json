@@ -1,28 +1,18 @@
 {
-  "name": "bikeorcar",
-  "version": "1.0.0",
-  "description": "Is the weather good enough to go by bike or should I take my car?",
-  "main": "index.js",
-  "scripts": {
-    "test": "jest --coverage"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/FabienLebas/BikeOrCar.git"
-  },
-  "author": "Fabien Lebas",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/FabienLebas/BikeOrCar/issues"
-  },
-  "homepage": "https://github.com/FabienLebas/BikeOrCar#readme",
+  "name": "meteo",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
-    "express": "^4.16.2",
-    "fs": "0.0.1-security",
-    "jest": "^22.0.4",
-    "node-fetch": "^1.7.3",
-    "nunjucks": "^3.0.1",
-    "pg": "^7.4.0",
-    "request": "^2.83.0"
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "1.0.17",
+    "react-test-renderer": "^16.2.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
   }
 }
