@@ -11,10 +11,12 @@ class Weather extends Component {
     this.state = {
       morning: "8",
       afternoon: "18",
-      tempmin: 3,
+      tempmin: 0,
       tempmax: 27,
       current: "Loading current weather",
-      forecast: "Loading weather forecast"
+      forecast: "Loading weather forecast",
+      loadedCurrent: false,
+      loadedForecast: false
     }
   }
 
@@ -51,14 +53,16 @@ class Weather extends Component {
       .then(currentWeather => {
         this.setState({
           ...this.state,
-          current: currentWeather
+          current: currentWeather,
+          loadedCurrent: true
         })
       })
     getWeatherForecastFromCoordinates(this.props.match.params.latitude, this.props.match.params.longitude, this.state.morning, this.state.afternoon)
       .then(forecastResult => {
         this.setState({
           ...this.state,
-          forecast: forecastResult
+          forecast: forecastResult,
+          loadedForecast: true
         })
       });
   }
@@ -125,20 +129,13 @@ class Weather extends Component {
   }
 
   displayForecast(){
-    if(this.state.forecast === "Loading weather forecast"){
-      return(
-        <tr><td>{this.state.forecast}</td></tr>
-      )
-    } else {
       let result = this.filterHours(this.state.forecast);
       result = this.removeLastDayIfNotFull(result);
       result = this.removeFirstDayIfNotFull(result);
       return this.daysInside(result).map((dayNumber, index) => {
         const currentDay = this.filter1Day(dayNumber, result);
         return this.displayRow(this.tomorrowOrToday(currentDay[0].FCTTIME.weekday_name), currentDay[0].temp.metric, currentDay[0].icon_url, currentDay[1].temp.metric, currentDay[1].icon_url, this.decideIfBike(currentDay[0], currentDay[1]), index);
-      }
-      )
-    }
+    })
   }
 
   decideIfBike(dataMorning, dataAfternoon){
@@ -159,41 +156,58 @@ class Weather extends Component {
   }
 
   render() {
-    return (
-      <div className="App">
-        <nav className="navbar navbar-dark bg-info">
-          <a href="/whoweare.html">
-            <span className="navbar-brand mb-0 h1">Bike or Car? <span className="beta">beta</span></span>
-          </a>
-          <a href="/">
-            <i className="fa fa-refresh" aria-hidden="true"></i>
-          </a>
-        </nav>
+    if(!this.state.loadedCurrent || !this.state.loadedForecast){
+      return(
+        <div className="App">
+          <nav className="navbar navbar-dark bg-info">
+            <a href="/whoweare.html">
+              <span className="navbar-brand mb-0 h1">Bike or Car? <span className="beta">beta</span></span>
+            </a>
+            <a href="/">
+              <i className="fa fa-refresh" aria-hidden="true"></i>
+            </a>
+          </nav>
         <div className="container jumbotron jumbotron-fluid">
-          <h2 className="display-5 text-center font-weight-normal">{this.props.match.params.city}</h2>
-          <p className="text-center">{this.state.current.weather}, vent {Math.round(this.state.current.wind_kph)} km/h de {this.state.current.wind_dir}</p>
-          <h1 className="display-5 text-center font-weight-normal">{Math.round(this.state.current.temp_c)}°</h1>
+          <h2 className="display-5 text-center font-weight-normal">Loading your forecast</h2>
         </div>
-        <div className="container">
-          <table className="table">
-            <thead>
-                <HoursInput morning={this.state.morning} afternoon={this.state.afternoon} handleInputMorning={this.handleInputMorning} handleInputAfternoon={this.handleInputAfternoon}/>
-            </thead>
-            <tbody>
-              {this.displayForecast()}
-            </tbody>
-          </table>
-        </div>
-        <hr/>
-        <div className="container">
-          <h2 className="display-5 text-center font-weight-normal">Paramètres</h2>
-          <table>
-              <TempInput min={this.state.tempmin} max={this.state.tempmax} handleInputTempMin={this.handleInputTempMin} handleInputTempMax={this.handleInputTempMax}/>
-          </table>
-        </div>
-
       </div>
-    );
+      );} else {
+        return (
+        <div className="App">
+          <nav className="navbar navbar-dark bg-info">
+            <a href="/whoweare.html">
+              <span className="navbar-brand mb-0 h1">Bike or Car? <span className="beta">beta</span></span>
+            </a>
+            <a href="/">
+              <i className="fa fa-refresh" aria-hidden="true"></i>
+            </a>
+          </nav>
+          <div className="container jumbotron jumbotron-fluid">
+            <h2 className="display-5 text-center font-weight-normal">{this.props.match.params.city}</h2>
+            <p className="text-center">{this.state.current.weather}, vent {Math.round(this.state.current.wind_kph)} km/h de {this.state.current.wind_dir}</p>
+            <h1 className="display-5 text-center font-weight-normal">{Math.round(this.state.current.temp_c)}°</h1>
+          </div>
+          <div className="container">
+            <table className="table">
+              <thead>
+                  <HoursInput morning={this.state.morning} afternoon={this.state.afternoon} handleInputMorning={this.handleInputMorning} handleInputAfternoon={this.handleInputAfternoon}/>
+              </thead>
+              <tbody>
+                {this.displayForecast()}
+              </tbody>
+            </table>
+          </div>
+          <hr/>
+          <div className="container">
+            <h2 className="display-5 text-center font-weight-normal">Paramètres</h2>
+            <table>
+                <TempInput min={this.state.tempmin} max={this.state.tempmax} handleInputTempMin={this.handleInputTempMin} handleInputTempMax={this.handleInputTempMax}/>
+            </table>
+          </div>
+
+        </div>
+      );
+    }
   }
 }
 
