@@ -12,7 +12,7 @@ class Weather extends Component {
       morning: "8",
       afternoon: "18",
       tempmin: 0,
-      tempmax: 27,
+      tempmax: 30,
       current: "Loading current weather",
       forecast: "Loading weather forecast",
       loadedCurrent: false,
@@ -141,10 +141,10 @@ class Weather extends Component {
   decideIfBike(dataMorning, dataAfternoon){
     if(dataMorning.fctcode < 8 &&
        dataAfternoon.fctcode < 8 &&
-       parseInt(dataMorning.temp.metric) >= this.state.tempmin &&
-       parseInt(dataAfternoon.temp.metric) >=this.state.tempmin &&
-       parseInt(dataMorning.temp.metric) <= this.state.tempmax &&
-       parseInt(dataAfternoon.temp.metric) <= this.state.tempmax
+       parseInt(dataMorning.temp.metric, 10) >= this.state.tempmin &&
+       parseInt(dataAfternoon.temp.metric, 10) >=this.state.tempmin &&
+       parseInt(dataMorning.temp.metric, 10) <= this.state.tempmax &&
+       parseInt(dataAfternoon.temp.metric, 10) <= this.state.tempmax
       ){
       return "http://www.atelierjespers.com/images/pharrell%20williams%20-%20velo%20bleu.jpg";
     }
