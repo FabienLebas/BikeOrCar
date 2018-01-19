@@ -1,4 +1,4 @@
-const googleAPIKey = process.env.REACT_APP_googleAPIKey;
+const REACT_APP_googleAPIKey = process.env.REACT_APP_googleAPIKey;
 
 function getCityName(latitude, longitude){
   console.log();
