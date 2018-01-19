@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import getCityName from './google';
+import getCityName from './queries/google';
 
 class FindCity extends Component {
   constructor(props){

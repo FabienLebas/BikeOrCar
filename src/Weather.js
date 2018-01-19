@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
-import getWeatherForecastFromCoordinates from './forecast.js';
-import getCurrentWeatherFromCoordinates from './current.js'
+import getWeatherForecastFromCoordinates from './queries/forecast.js';
+import getCurrentWeatherFromCoordinates from './queries/current.js'
 import HoursInput from './HoursInput.js';
 import TempInput from './TempInput.js';
 
@@ -151,8 +151,14 @@ class Weather extends Component {
     return "http://www2.mes-coloriages-preferes.biz/colorino/Images/Large/Vehicules-Voiture-MINI-110563.png";
   }
 
-  displayWindDirection(direction){
-
+  displayWindDirection(wind_dir){
+    const givenWinds=["East", "ENE", "ESE", "NE", "NNE", "NNW", "North", "NW", "SE", "South", "SSE", "SSW", "SW", "Variable", "West", "WNW", "WSW"];
+    const targetWinds=["Est", "Est - Nord Est", "Est - Sud Est", "Nord Est", "Nord Nord Est", "Nord Nord Ouest", "Nord", "Nord Ouest", "Sud Est", "Sud", "Sud Sud Est", "Sud Sud Ouest", "Sud Ouest", "Variable", "Ouest", "Ouest Nord Ouest", "Ouest Sud Ouest"];
+    if (givenWinds.findIndex(direction => direction === wind_dir) >= 0) {
+      return targetWinds[givenWinds.findIndex(direction => direction === wind_dir)];
+    } else {
+      return wind_dir;
+    }
   }
 
   render() {
@@ -184,7 +190,7 @@ class Weather extends Component {
           </nav>
           <div className="container jumbotron jumbotron-fluid">
             <h2 className="display-5 text-center font-weight-normal">{this.props.match.params.city}</h2>
-            <p className="text-center">{this.state.current.weather}, vent {Math.round(this.state.current.wind_kph)} km/h de {this.state.current.wind_dir}</p>
+            <p className="text-center">{this.state.current.weather}, vent {Math.round(this.state.current.wind_kph)} km/h de {this.displayWindDirection(this.state.current.wind_dir)}</p>
             <h1 className="display-5 text-center font-weight-normal">{Math.round(this.state.current.temp_c)}°</h1>
           </div>
           <div className="container">
