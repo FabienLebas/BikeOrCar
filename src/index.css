@@ -4,7 +4,11 @@ body {
   font-family: sans-serif;
 }
 .decisionImage{
-  max-width: 300px;
+  max-width: 200px;
+
+}
+.icon{
+  max-width: 100px;
 }
 .input{
   margin-right: 50px;
