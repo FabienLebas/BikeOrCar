@@ -134,7 +134,11 @@ class Weather extends Component {
       result = this.removeFirstDayIfNotFull(result);
       return this.daysInside(result).map((dayNumber, index) => {
         const currentDay = this.filter1Day(dayNumber, result);
-        return this.displayRow(this.tomorrowOrToday(currentDay[0].FCTTIME.weekday_name), currentDay[0].temp.metric, currentDay[0].icon_url, currentDay[1].temp.metric, currentDay[1].icon_url, this.decideIfBike(currentDay[0], currentDay[1]), index);
+        if(index <= 1){
+          return this.displayRow(this.tomorrowOrToday(currentDay[0].FCTTIME.weekday_name), currentDay[0].temp.metric, currentDay[0].icon_url, currentDay[1].temp.metric, currentDay[1].icon_url, this.decideIfBike(currentDay[0], currentDay[1]), index);
+        } else {
+          return this.displayRow(currentDay[0].FCTTIME.weekday_name, currentDay[0].temp.metric, currentDay[0].icon_url, currentDay[1].temp.metric, currentDay[1].icon_url, this.decideIfBike(currentDay[0], currentDay[1]), index);
+        }
     })
   }
 
