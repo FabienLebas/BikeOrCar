@@ -21,7 +21,7 @@ class FindCity extends Component {
 
   render(){
     if(this.state.findCityOK){
-      const route = `/${this.state.city}/${this.props.match.params.latitude}/${this.props.match.params.longitude}`;
+      const route = `/${this.state.city}`;
       return(
         <Redirect to={route}></Redirect>
       );

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import './App.css';
 import getWeatherForecastFromCoordinates from './queries/forecast.js';
 import getCurrentWeatherFromCoordinates from './queries/current.js'
@@ -16,7 +17,9 @@ class Weather extends Component {
       current: "Loading current weather",
       forecast: "Loading weather forecast",
       loadedCurrent: false,
-      loadedForecast: false
+      loadedForecast: false,
+      latitude:false,
+      longitude:false
     }
   }
 
@@ -48,8 +51,18 @@ class Weather extends Component {
     });
   }
 
+  componentWillMount(){
+    if(localStorage.getItem("latitude") !== undefined && localStorage.getItem("longitude") !== undefined){
+      this.setState({
+        ...this.state,
+        latitude: localStorage.getItem("latitude"),
+        longitude: localStorage.getItem("longitude")
+      })
+    }
+  }
+
   componentDidMount(){
-    getCurrentWeatherFromCoordinates(this.props.match.params.latitude, this.props.match.params.longitude)
+    getCurrentWeatherFromCoordinates(this.state.latitude, this.state.longitude)
       .then(currentWeather => {
         this.setState({
           ...this.state,
@@ -57,7 +70,7 @@ class Weather extends Component {
           loadedCurrent: true
         })
       })
-    getWeatherForecastFromCoordinates(this.props.match.params.latitude, this.props.match.params.longitude, this.state.morning, this.state.afternoon)
+    getWeatherForecastFromCoordinates(this.state.latitude, this.state.longitude, this.state.morning, this.state.afternoon)
       .then(forecastResult => {
         this.setState({
           ...this.state,
@@ -166,7 +179,11 @@ class Weather extends Component {
   }
 
   render() {
-    if(!this.state.loadedCurrent || !this.state.loadedForecast){
+    if(!this.state.latitude || !this.state.longitude){
+      return(
+        <Redirect to="/"></Redirect>
+      )
+    } else if(!this.state.loadedCurrent || !this.state.loadedForecast){
       return(
         <div className="App">
           <nav className="navbar navbar-dark bg-info">
