@@ -150,9 +150,9 @@ class Weather extends Component {
        parseInt(dataMorning.temp.metric, 10) <= this.state.tempmax &&
        parseInt(dataAfternoon.temp.metric, 10) <= this.state.tempmax
       ){
-      return "http://www.atelierjespers.com/images/pharrell%20williams%20-%20velo%20bleu.jpg";
+      return "/veloBleu.jpg";
     }
-    return "http://www2.mes-coloriages-preferes.biz/colorino/Images/Large/Vehicules-Voiture-MINI-110563.png";
+    return "/voitureRouge.png";
   }
 
   displayWindDirection(wind_dir){
