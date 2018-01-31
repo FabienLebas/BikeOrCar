@@ -11,8 +11,20 @@ class Home extends Component {
     };
   }
 
+  storeData(key, value){
+    try {
+      localStorage.setItem(key, value);
+      return true; // All went well
+    } catch (error) {
+      console.warn("something wrong happened", error);
+      return false; // An error occured
+    }
+  }
+
   success = (pos) => {
     const crd = pos.coords;
+    this.storeData("latitude", crd.latitude);
+    this.storeData("longitude", crd.longitude);
     this.setState({
       latitude: crd.latitude,
       longitude: crd.longitude,

@@ -27,7 +27,7 @@ class App extends Component {
         <div className="App">
           <Route exact path="/" render={() => <Home />}/>
           <Route path="/findCity/:latitude/:longitude" render={(routerProps) => <FindCity {...routerProps}/>}/>
-          <Route path="/:city/:latitude/:longitude" render={(routerProps) => <Weather {...routerProps}/>}/>
+          <Route path="/:city" render={(routerProps) => <Weather {...routerProps}/>}/>
         </div>
       </Router>
     );
