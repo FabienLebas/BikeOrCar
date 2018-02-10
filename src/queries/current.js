@@ -1,9 +1,17 @@
-const wundergroundId = process.env.REACT_APP_wundergroundId;
-
 function getCurrentWeatherFromCoordinates(latitude, longitude){
-  return fetch(`https://api.wunderground.com/api/${wundergroundId}/conditions/lang:FR/q/${latitude},${longitude}.json`)
+  return fetch(`https://bike-or-car-server.herokuapp.com/getCurrentWeatherFromCoordinates`, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "POST",
+      body: JSON.stringify({
+        latitude: latitude,
+        longitude: longitude
+      }
+      )
+    })
   .then(response => response.json())
-  .then(returnedData => returnedData.current_observation)
+  .then(returnedData => JSON.parse(returnedData))
   .catch(error => {
     console.warn("Error while getting current weather from Wunderground : " + error);
   });

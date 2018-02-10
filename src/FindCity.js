@@ -12,11 +12,15 @@ class FindCity extends Component {
   }
 
   componentDidMount(){
-    getCityName(this.props.match.params.latitude, this.props.match.params.longitude)
-      .then(result => this.setState({
-        city: result.city,
-        findCityOK: true
-      }))
+    getCityName(localStorage.getItem("latitude"), localStorage.getItem("longitude"))
+      .then(result => {
+        console.log(result);
+        console.log("toto");
+        this.setState({
+          city: result.city,
+          findCityOK: true
+        });
+      } )
   }
 
   render(){
