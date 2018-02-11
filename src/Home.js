@@ -49,7 +49,7 @@ class Home extends Component {
 
   render(){
     if(this.state.geolocOK){
-      const route = `/findCity/${this.state.latitude}/${this.state.longitude}`;
+      const route = `/findCity`;
       return(
         <Redirect to={route}></Redirect>
       );

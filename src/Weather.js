@@ -70,7 +70,7 @@ class Weather extends Component {
           loadedCurrent: true
         })
       })
-    getWeatherForecastFromCoordinates(this.state.latitude, this.state.longitude, this.state.morning, this.state.afternoon)
+    getWeatherForecastFromCoordinates(this.state.latitude, this.state.longitude)
       .then(forecastResult => {
         this.setState({
           ...this.state,
@@ -163,9 +163,9 @@ class Weather extends Component {
        parseInt(dataMorning.temp.metric, 10) <= this.state.tempmax &&
        parseInt(dataAfternoon.temp.metric, 10) <= this.state.tempmax
       ){
-      return "/veloBleu.jpg";
+      return "veloBleu.jpg";
     }
-    return "/voitureRouge.png";
+    return "voitureRouge.png";
   }
 
   displayWindDirection(wind_dir){
