@@ -14,8 +14,6 @@ class FindCity extends Component {
   componentDidMount(){
     getCityName(localStorage.getItem("latitude"), localStorage.getItem("longitude"))
       .then(result => {
-        console.log(result);
-        console.log("toto");
         this.setState({
           city: result.city,
           findCityOK: true
