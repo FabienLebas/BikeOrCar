@@ -24,29 +24,29 @@ class Weather extends Component {
   }
 
   handleInputMorning = (input) => {
+    localStorage.setItem("inputMorning", input);
     this.setState({
-      ...this.state,
       morning: input
     });
   }
 
   handleInputAfternoon = (input) => {
+    localStorage.setItem("inputAfternoon", input);
     this.setState({
-      ...this.state,
       afternoon: input
     });
   }
 
   handleInputTempMin = (input) => {
+    localStorage.setItem("inputTempMin", input);
     this.setState({
-      ...this.state,
       tempmin: input
     });
   }
 
   handleInputTempMax = (input) => {
+    localStorage.setItem("inputTempMax", input);
     this.setState({
-      ...this.state,
       tempmax:input
     });
   }
@@ -54,30 +54,51 @@ class Weather extends Component {
   componentWillMount(){
     if(localStorage.getItem("latitude") !== undefined && localStorage.getItem("longitude") !== undefined){
       this.setState({
-        ...this.state,
         latitude: localStorage.getItem("latitude"),
         longitude: localStorage.getItem("longitude")
       })
-    }
+    };
+
   }
 
   componentDidMount(){
-    getCurrentWeatherFromCoordinates(this.state.latitude, this.state.longitude)
-      .then(currentWeather => {
+    let morning = this.state.morning;
+    let afternoon = this.state.afternoon;
+    let tempmin = this.state.tempmin;
+    let tempmax = this.state.tempmax;
+    let current = this.state.current;
+
+    Promise.all([getCurrentWeatherFromCoordinates(this.state.latitude, this.state.longitude), getWeatherForecastFromCoordinates(this.state.latitude, this.state.longitude)])
+      .then(values => {
+        if(localStorage.getItem("inputMorning") !== null){
+          morning = localStorage.getItem("inputMorning");
+        }
+
+        if(localStorage.getItem("inputAfternoon") !== null){
+          afternoon = localStorage.getItem("inputAfternoon");
+        }
+
+        if(localStorage.getItem("inputTempMin") !== null){
+          tempmin = parseInt(localStorage.getItem("inputTempMin"), 10);
+        }
+
+        if(localStorage.getItem("inputTempMax") !== null){
+          tempmax = parseInt(localStorage.getItem("inputTempMax"), 10);
+        }
+
+        return values;})
+      .then(values => {
         this.setState({
-          ...this.state,
-          current: currentWeather,
-          loadedCurrent: true
-        })
-      })
-    getWeatherForecastFromCoordinates(this.state.latitude, this.state.longitude)
-      .then(forecastResult => {
-        this.setState({
-          ...this.state,
-          forecast: forecastResult,
+          morning: morning,
+          afternoon: afternoon,
+          tempmin: tempmin,
+          tempmax: tempmax,
+          current: values[0],
+          loadedCurrent: true,
+          forecast: values[1],
           loadedForecast: true
-        })
-      });
+        });
+      })
   }
 
   filter1Day(dayNumber, forecast){
